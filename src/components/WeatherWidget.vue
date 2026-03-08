@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const WEATHER_API_KEY = '21b13a4ed1bbb0539f38e9f537f5cc75'
+const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 const CITY = 'Milano'
 
 const weather = ref({
