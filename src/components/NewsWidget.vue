@@ -10,21 +10,22 @@ const fetchNews = async () => {
   loading.value = true
   error.value = null
   try {
-    // Top headlines in Italy
-    const response = await fetch(`https://newsapi.org/v2/top-headlines?country=it&apiKey=${NEWS_API_KEY}`)
+    // Top news from Italy using CurrentsAPI (CORS-friendly for Production)
+    const response = await fetch(`https://api.currentsapi.services/v1/latest-news?language=it&apiKey=${NEWS_API_KEY}`)
     if (!response.ok) throw new Error('Errore nel caricamento delle notizie')
     
     const data = await response.json()
-    newsArticles.value = data.articles.map((article, index) => ({
-      id: index,
+    // CurrentsAPI uses data.news instead of data.articles
+    newsArticles.value = data.news.map((article, index) => ({
+      id: article.id || index,
       title: article.title,
-      source: article.source.name,
-      time: new Date(article.publishedAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+      source: article.author || 'Notizie',
+      time: new Date(article.published).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
       url: article.url
     }))
   } catch (err) {
     console.error('News Error:', err)
-    error.value = 'Impossibile caricare le notizie.'
+    error.value = 'Impossibile caricare le notizie in produzione.'
   } finally {
     loading.value = false
   }
