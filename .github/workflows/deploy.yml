@@ -27,9 +27,8 @@ jobs:
     steps:
       - name: Fix broken apt mirrors
         run: |
-          sudo rm -f /etc/apt/apt-mirrors.txt
+          sudo sed -i 's|mirror+file:/etc/apt/apt-mirrors.txt|http://azure.archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/*.list 2>/dev/null || true
           sudo apt-get update
-          sudo apt-get install -y rsync
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Node
