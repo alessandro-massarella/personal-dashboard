@@ -25,10 +25,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install rsync
+      - name: Fix broken apt mirrors
         run: |
-          sudo apt-get update || true
-          sudo apt-get install -y --fix-missing rsync
+          sudo rm -f /etc/apt/apt-mirrors.txt
+          sudo apt-get update
+          sudo apt-get install -y rsync
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Node
